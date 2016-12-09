@@ -1,0 +1,6 @@
+(define (t)
+	(let ((run 0))
+	   (lambda (x) (if (= run 0)
+			   (begin (set! run (+ run 1)) x)
+			   0))))
+(define f (t))
