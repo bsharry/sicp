@@ -1,0 +1,5 @@
+(define (accumulate-n op init sequence)
+  (if (null? (car sequence))
+      '()
+      (cons (accumulate op init (map car sequence))
+	    (accumulate-n op init (map cdr sequence)))))
