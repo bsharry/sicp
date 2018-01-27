@@ -10,3 +10,7 @@
 		(cond ((null? items) ())
 			((not (pair? items)) (list items))
 			(else (append (emulate-tree (car items)) (emulate-tree (cdr items))))))
+
+(define (flatmap op l)
+  (accumulate append '() (map op l)))
+

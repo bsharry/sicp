@@ -1,0 +1,33 @@
+(define (queens board-size)
+  (define (queen-cols k)
+    (if (= k 0)
+	(list empty-board)
+	(filter
+	 (lambda (positions) (safe? k positions))
+	 (flatmap
+	  (lambda (rest-of-queens)
+	    (map (lambda (new-row)
+		   (adjoin-position
+		    new-row k rest-of-queens))
+		 (enumerate-interval 1 board-size)))
+	  (queen-cols (- k 1))))))
+  (queen-cols board-size))
+
+(define empty-board (list 'queen))
+(define (adjoin-position new-row k rest-of-queens)
+  (if (= k 0)
+      (cons new-row rest-of-queens)
+      (cons (car rest-of-queens) (adjoin-position new-row (- k 1)
+						  (cdr rest-of-queens)))))
+(define (safe? k positions)
+  (define result (list-ref positions k))
+  (define (iter i p)
+    (cond ((null? p) #t)
+	  ((eq? i k) (iter (+ i 1) (cdr p)))
+	  ((or (eq? result (car p))
+	       (eq? result (+ (car p) (- k i)))
+	       (eq? result (- (car p) (- k i))))
+	   #f)
+	  (else (iter (+ i 1) (cdr p)))))
+  (iter 1 (cdr positions)))
+  
