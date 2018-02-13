@@ -1,0 +1,30 @@
+(define (split L)
+  (define (right L a b)
+    (if (null? L)
+	(list a b)
+	(left (cdr L) a (cons (car L) b))))
+  (define (left L a b)
+    (if (null? L)
+	(list a b)
+	(right (cdr L) (cons (car L) a) b)))
+  (left L '() '()))
+    
+
+(define (merge-sort L)
+  (cond ((null? L) '()) 
+	((= (length L) 2) (sort2 (car L) (cadr L)))
+	(else (let ((result (split L)))
+		(merge (merge-sort (car L)) (merge-sort (cdr L)))))))
+
+(define (sort2 a b)
+  (if (< a b)
+      (cons a b)
+      (cons b a)))
+
+(define (merge p q)
+  (cond ((null? p) q)
+	((null? q) p)
+	((< (car p) (car q))
+	 (cons (car p) (merge (cdr p) q)))
+	(else (cons (car q) (merge p (cdr q))))))
+     

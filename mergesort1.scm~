@@ -1,0 +1,42 @@
+(define (mergesort L)
+  (define tmp (map list L))
+  (define (iter newL)
+    (if (null? (cdr newL))
+	(car newL)
+	(iter (go newL '()))))
+  (iter tmp))
+
+      
+(define (sort2 a b)
+  (if (< a b)
+      (list a b)
+      (list b a)))
+
+(define (mergeL a b)
+  (cond ((null? a) b)
+	((null? b) a)
+	((< (car a) (car b)) (cons (car a) (mergeL (cdr a) b)))
+	(else (cons (car b) (mergeL a (cdr b))))))
+
+(define (go wait-list finish-list)
+  (if (null? wait-list)
+      finish-list
+      (if (null? (cdr wait-list))
+	  (cons (merge (car wait-list) (car finish-list)) (cdr finish-list))
+	  (go (cddr wait-list) (cons (merge (car wait-list)
+					    (cadr wait-list))
+				     finish-list)))))
+					    
+
+(define (merge a b)
+  (define (iter tmp a b)
+    (cond ((null? a) (append tmp b))
+	  ((null? b) (append tmp a))
+	  ((< (car a) (car b)) (iter (append tmp (list (car a))) (cdr a) b))
+	  (else (iter (append tmp (list (car b))) a (cdr b)))))
+  (iter '() a b))
+
+(define (enumerate a b tmp)
+  (if (= a b) tmp (enumerate a (- b 1) (cons b tmp))))
+
+(define test (enumerate 0 100000 '()))
